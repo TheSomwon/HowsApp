@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865526629157",
+    "project_id": "howsapp-c6bec",
+    "storage_bucket": "howsapp-c6bec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865526629157:android:b17364cd9eb6cb8ebb90cc",
+        "android_client_info": {
+          "package_name": "com.example.howsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865526629157-4ucjdafmtun7bq095h075438dihvbaa6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXooZI9wFOuBl5I4yNJ2PR6hPVdi8C6ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865526629157-4ucjdafmtun7bq095h075438dihvbaa6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
