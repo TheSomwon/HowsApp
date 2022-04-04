@@ -58,7 +58,7 @@ class signInState extends State<signIn> {
                 FirestoreHelper().SignIn(email, password);
                 print("je me suis co");
 
-                Navigator.push(context, MaterialPageRoute(
+                Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (context){
                       return chatrooms();
                     }
