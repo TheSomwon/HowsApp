@@ -1,9 +1,12 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howsapp/functions/firestoreHelper.dart';
+import 'package:howsapp/model/utilisateur.dart';
 import 'package:howsapp/views/signup.dart';
 import 'package:howsapp/widget/widget.dart';
 
+import '../functions/helperfunctions.dart';
 import 'chatrooms.dart';
 
 class signIn extends StatefulWidget{
@@ -16,6 +19,36 @@ class signIn extends StatefulWidget{
 class signInState extends State<signIn> {
   late String email;
   late String password;
+  late String userName;
+  late Map<String, dynamic>userMap;
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  signMeIn() async{
+
+    await _firestore.collection("Utilisateur").where("EMAIL", isEqualTo: email).get()
+        .then((value){
+          userMap = value.docs[0].data();
+          userName = userMap["USERNAME"];
+    });
+
+    // HelperFunctions.saveUserNameSharedPreference();
+
+    FirestoreHelper().SignIn(email, password).then((value) {
+      print("je me suis co");
+
+      HelperFunctions.saveUserEmailSharedPreference(email);
+      HelperFunctions.saveUserNameSharedPreference(userName);
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+
+
+      Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context){
+            return chatrooms();
+          }
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +88,7 @@ class signInState extends State<signIn> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
               ),
               onPressed: (){
-                FirestoreHelper().SignIn(email, password).then((value) {
-                  print("je me suis co");
-
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder: (context){
-                        return chatrooms();
-                      }
-                  ));
-                });
+                signMeIn();
               },
               child: Text("Sign In")
           ),

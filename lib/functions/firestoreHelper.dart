@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../model/utilisateur.dart';
+
 
 class FirestoreHelper{
   final auth = FirebaseAuth.instance;
@@ -42,4 +44,12 @@ class FirestoreHelper{
       return null;
     }
   }
+
+  getUserByUserEmail(String email) async{
+    return await fire_user.where("EMAIL", isEqualTo: email).get().catchError((e) {
+      print(e.toString());
+    });
+  }
+
+
 }
