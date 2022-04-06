@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:howsapp/functions/constants.dart';
 import 'package:howsapp/functions/firestoreHelper.dart';
+import 'package:howsapp/functions/helperfunctions.dart';
 import 'package:howsapp/views/search.dart';
 import 'package:howsapp/views/signin.dart';
 
@@ -14,6 +16,16 @@ class chatrooms extends StatefulWidget{
 class chatroomsState extends State<chatrooms>{
 
   FirestoreHelper firestoreHelper = new FirestoreHelper();
+
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async{
+    Constants.myName = (await HelperFunctions.getUserNameSharedPreference())!;
+  }
 
   @override
   Widget build(BuildContext context) {

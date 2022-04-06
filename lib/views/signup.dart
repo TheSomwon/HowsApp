@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:howsapp/views/signin.dart';
 import 'package:howsapp/widget/widget.dart';
 
 import '../functions/firestoreHelper.dart';
+import '../functions/helperfunctions.dart';
 
 class signUp extends StatefulWidget{
   @override
@@ -15,6 +15,19 @@ class signUpState extends State<signUp> {
   late String email;
   late String password;
   late String username;
+
+  signMeUp(){
+    Map<String, String> userInfomap ={
+      "username": username,
+      "email": email,
+      "password": password
+    };
+    HelperFunctions.saveUserLoggedInSharedPreference(true);
+    HelperFunctions.saveUserEmailSharedPreference(email);
+    HelperFunctions.saveUserNameSharedPreference(username);
+
+    FirestoreHelper().SignUp(email, password, username);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +77,7 @@ class signUpState extends State<signUp> {
               ),
               onPressed: (){
                 print("Je me suis inscris");
-                FirestoreHelper().SignUp(email, password, username);
+                signMeUp();
               },
               child: Text("Sing Up")
           ),

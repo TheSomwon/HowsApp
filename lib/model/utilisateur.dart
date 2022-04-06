@@ -11,9 +11,9 @@ class Utilisateur{
   Utilisateur(DocumentSnapshot snapshot){
     id = snapshot.id;
     Map<String, dynamic> map = snapshot.data() as Map<String, dynamic>;
-    avatar = map["avatar"];
-    email = map["email"];
-    username = map["username"];
+    avatar = map["AVATAR"];
+    email = map["EMAIL"];
+    username = map["USERNAME"];
   }
 
   Utilisateur.vide();
