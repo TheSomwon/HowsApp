@@ -55,16 +55,17 @@ class signInState extends State<signIn> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
               ),
               onPressed: (){
-                FirestoreHelper().SignIn(email, password);
-                print("je me suis co");
+                FirestoreHelper().SignIn(email, password).then((value) {
+                  print("je me suis co");
 
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                    builder: (context){
-                      return chatrooms();
-                    }
-                ));
+                  Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context){
+                        return chatrooms();
+                      }
+                  ));
+                });
               },
-              child: Text("Sing In")
+              child: Text("Sign In")
           ),
           InkWell(
             child: Text("New account",style: TextStyle(color: Colors.blue),),

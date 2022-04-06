@@ -1,9 +1,8 @@
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:howsapp/model/utilisateur.dart';
+
 
 class FirestoreHelper{
   final auth = FirebaseAuth.instance;
@@ -17,7 +16,7 @@ class FirestoreHelper{
     Map<String, dynamic>map = {
       "EMAIL": email,
       "USERNAME": username,
-      "PASSWORD": password
+      "PASSWORD": password,
     };
     addUser(uid, map);
   }
