@@ -4,6 +4,7 @@ import 'package:howsapp/functions/database.dart';
 import 'package:howsapp/widget/widget.dart';
 
 import '../functions/constants.dart';
+import '../functions/helperfunctions.dart';
 
 
 class ConversationScreen extends StatefulWidget {
@@ -15,15 +16,80 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
 
+  late String myName, myProfilePic, myUserName, myEmail, chatRoomId;
+
   DatabaseMethods databaseMethods = DatabaseMethods();
   TextEditingController messageEditingController = new TextEditingController();
 
+  late Stream messageStream;
 
-  //
-  // Widget chatMessagesList(){
-  //
-  //
-  // }
+  Widget chatMessages() {
+    return StreamBuilder(
+        stream: messageStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+              padding: EdgeInsets.only(bottom: 70, top: 16),
+              itemCount: snapshot.data!.docs.length,
+              reverse: true,
+              itemBuilder: (context, index) {
+                DocumentSnapshot ds = snapshot.data!.docs[index];
+                return chatMessageTile(
+                    ds["message"], myUserName == ds["sendBy"]);
+              })
+              : Center(child: CircularProgressIndicator());
+        });
+  }
+  
+  getAndSetMessages() async {
+    messageStream = await DatabaseMethods().getConversationMessages(widget.chatRoomId);
+    setState(() {});
+  }
+
+  doThisOnLaunch() async {
+    await getMyInfoFromSharedPreference();
+    getAndSetMessages();
+  }
+
+  getMyInfoFromSharedPreference() async {
+    // myName = await HelperFunctions.sharedPreferenceUserNameKey;
+    // myProfilePic = await SharedPreferenceHelper().getUserProfileUrl();
+    myUserName = await HelperFunctions.sharedPreferenceUserNameKey;
+    myEmail = await HelperFunctions.sharedPreferenceUserEmailKey;
+
+    chatRoomId = widget.chatRoomId;
+  }
+
+
+  Widget chatMessageTile(String message, bool sendByMe) {
+    return Row(
+      mainAxisAlignment:
+      sendByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  bottomRight:
+                  sendByMe ? Radius.circular(0) : Radius.circular(24),
+                  topRight: Radius.circular(24),
+                  bottomLeft:
+                  sendByMe ? Radius.circular(24) : Radius.circular(0),
+                ),
+                color: sendByMe ? Colors.blue : Color(0xfff1f0f0),
+              ),
+              padding: EdgeInsets.all(16),
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.black),
+              )),
+        ),
+      ],
+    );
+  }
+
 
   sendMessage(){
     if(messageEditingController.text.isNotEmpty){
@@ -31,9 +97,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
         "message":messageEditingController.text,
         "sendBy": Constants.myName
       };
-      databaseMethods.getConversationMessages(widget.chatRoomId, messageMap);
+      databaseMethods.addConversationMessages(widget.chatRoomId, messageMap);
     }
 
+  }
+
+  @override
+  void initState() {
+    doThisOnLaunch();
+    super.initState();
   }
 
   @override
@@ -43,7 +115,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       body: Container(
         child: Stack(
           children: [
-            // chatMessagesList(),
+            chatMessages(),
             Container(alignment: Alignment.bottomCenter,
               width: MediaQuery
                   .of(context)
@@ -100,4 +172,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 }
+
+
 
