@@ -16,11 +16,16 @@ class DatabaseMethods{
     });
   }
 
-  getConversationMessages(String chatRoomId, messageMap) async {
+  addConversationMessages(String chatRoomId, messageMap) async {
     return FirebaseFirestore.instance.collection("ChatRoom").doc(chatRoomId)
         .collection("chats").add(messageMap).catchError((e){
-          print(e.toString());
+      print(e.toString());
     });
+  }
+
+  getConversationMessages(String chatRoomId) async {
+    return FirebaseFirestore.instance.collection("ChatRoom").doc(chatRoomId)
+        .collection("chats").snapshots();
   }
 
 }
